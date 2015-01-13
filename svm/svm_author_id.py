@@ -29,8 +29,8 @@ features_train, features_test, labels_train, labels_test = preprocess()
 from sklearn.svm import SVC
 clf = SVC(C=10000.0, kernel="rbf")
 
-features_train = features_train[:len(features_train)/100] 
-labels_train = labels_train[:len(labels_train)/100] 
+#features_train = features_train[:len(features_train)/100] 
+#labels_train = labels_train[:len(labels_train)/100] 
 
 print "training data"
 t0 = time()
@@ -47,6 +47,8 @@ authors = {0: "Sara", 1: "Chris"}
 print "Predicted to 10", authors[pred[10]]
 print "Predicted to 26", authors[pred[26]]
 print "Predicted to 50", authors[pred[50]]
+
+print "The total predicted itens to Chris is: ", list(pred).count(1)
 
 from sklearn.metrics import accuracy_score
 acc = accuracy_score(pred, labels_test)
