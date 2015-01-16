@@ -24,21 +24,48 @@ plt.scatter(grade_slow, bumpy_slow, color = "r", label="slow")
 plt.legend()
 plt.xlabel("bumpiness")
 plt.ylabel("grade")
-plt.show()
+#@plt.show()
 #################################################################################
 
 
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
 
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree     import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import AdaBoostClassifier
 
 
+#clf = DecisionTreeClassifier()
+#clf = RandomForestClassifier(n_estimators = 10, min_samples_split=20)
+#clf = SVC(C=120000, gamma=1,  kernel="rbf")
+#clf = GaussianNB()
+#clf = AdaBoostClassifier(n_estimators = 100, algorithm ='SAMME')
+#clf = KNeighborsClassifier(n_neighbors=22)
 
+classifiers = [
+	{"name":"Decision Tree", "clf": DecisionTreeClassifier()},
+	{"name":"Random Forest", "clf": RandomForestClassifier(n_estimators = 10, min_samples_split=20)},
+	{"name":"SVM", "clf":SVC(C=12000, gamma=1,  kernel="rbf")},
+	{"name":"Naive Bayes", "clf":GaussianNB()},
+	{"name":"Ada Boost", "clf":AdaBoostClassifier(n_estimators = 100, algorithm ='SAMME')},
+	{"name":"KNN", "clf": KNeighborsClassifier(n_neighbors=22)}
+]
 
+from sklearn.metrics import accuracy_score
 
+for algorithm in classifiers:
+	clf = algorithm["clf"]
+	clf.fit(features_train, labels_train)
 
+	pred = clf.predict(features_test)
+	acc = accuracy_score(pred, labels_test)
+	print("Accuracy score for %s is %s " %(algorithm["name"], acc))
 
-try:
-    prettyPicture(clf, features_test, labels_test)
-except NameError:
-    pass
+	try:
+		prettyPicture(clf, features_test, labels_test)
+	except NameError:
+  	 pass
