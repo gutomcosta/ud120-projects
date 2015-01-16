@@ -49,7 +49,7 @@ from sklearn.ensemble import AdaBoostClassifier
 classifiers = [
 	{"name":"Decision Tree", "clf": DecisionTreeClassifier()},
 	{"name":"Random Forest", "clf": RandomForestClassifier(n_estimators = 10, min_samples_split=20)},
-	{"name":"SVM", "clf":SVC(C=120000, gamma=1,  kernel="rbf")},
+	{"name":"SVM", "clf":SVC(C=12000, gamma=1,  kernel="rbf")},
 	{"name":"Naive Bayes", "clf":GaussianNB()},
 	{"name":"Ada Boost", "clf":AdaBoostClassifier(n_estimators = 100, algorithm ='SAMME')},
 	{"name":"KNN", "clf": KNeighborsClassifier(n_neighbors=22)}
