@@ -33,18 +33,39 @@ plt.ylabel("grade")
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree     import DecisionTreeClassifier
-#clf = DecisionTreeClassifier()
-clf = RandomForestClassifier(n_estimators = 10, min_samples_split=20)
-clf.fit(features_train, labels_train)
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import AdaBoostClassifier
 
-pred = clf.predict(features_test)
+
+#clf = DecisionTreeClassifier()
+#clf = RandomForestClassifier(n_estimators = 10, min_samples_split=20)
+#clf = SVC(C=120000, gamma=1,  kernel="rbf")
+#clf = GaussianNB()
+#clf = AdaBoostClassifier(n_estimators = 100, algorithm ='SAMME')
+#clf = KNeighborsClassifier(n_neighbors=22)
+
+classifiers = [
+	{"name":"Decision Tree", "clf": DecisionTreeClassifier()},
+	{"name":"Random Forest", "clf": RandomForestClassifier(n_estimators = 10, min_samples_split=20)},
+	{"name":"SVM", "clf":SVC(C=120000, gamma=1,  kernel="rbf")},
+	{"name":"Naive Bayes", "clf":GaussianNB()},
+	{"name":"Ada Boost", "clf":AdaBoostClassifier(n_estimators = 100, algorithm ='SAMME')},
+	{"name":"KNN", "clf": KNeighborsClassifier(n_neighbors=22)}
+]
 
 from sklearn.metrics import accuracy_score
-acc = accuracy_score(pred, labels_test)
 
-print "accuracy_score, ", acc
+for algorithm in classifiers:
+	clf = algorithm["clf"]
+	clf.fit(features_train, labels_train)
 
-try:
-    prettyPicture(clf, features_test, labels_test)
-except NameError:
-    pass
+	pred = clf.predict(features_test)
+	acc = accuracy_score(pred, labels_test)
+	print("Accuracy score for %s is %s " %(algorithm["name"], acc))
+
+	try:
+		prettyPicture(clf, features_test, labels_test)
+	except NameError:
+  	 pass
