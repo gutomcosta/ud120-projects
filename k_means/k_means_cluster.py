@@ -55,7 +55,6 @@ features_list = [poi, feature_1, feature_2, feature_3]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
 
-print finance_features
 
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
@@ -65,12 +64,47 @@ for f1, f2, f3, in finance_features:
     plt.scatter( f1, f2, f3 )
 plt.show()
 
+## feature scaling 
+salary_filtered     = {k:v for k, v in data_dict.iteritems() if v['salary'] != 'NaN'}
+exercised_filtered  = {k:v for k, v in data_dict.iteritems() if v['exercised_stock_options'] != 'NaN'}
+salary      = []
+exercised   = []
+
+for k, v in salary_filtered.iteritems():
+    salary.append(float(v['salary']))
+
+for k,v in exercised_filtered.iteritems():
+    exercised.append(float(v['exercised_stock_options']))
+
+
+salary      = numpy.array([[e] for e in salary])
+exercised   = numpy.array([[e] for e in exercised])
+
+from sklearn.preprocessing import MinMaxScaler
+salary_scaler    = MinMaxScaler().fit(salary)
+exercised_scaler = MinMaxScaler().fit(exercised)
+
+print "Salary scaler: ", salary_scaler.transform(numpy.array([200000.0]))
+print "Exercised scaler: ", exercised_scaler.transform(numpy.array([1000000.0]))
+
+
+
+
+
+
+
+
 
 
 from sklearn.cluster import KMeans
 features_list = ["poi", feature_1, feature_2]
 data2 = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data2 )
+print finance_features
+
+
+
+
 clf = KMeans(n_clusters=2)
 pred = clf.fit_predict( finance_features )
 Draw(pred, finance_features, poi, name="clusters_before_scaling.pdf", f1_name=feature_1, f2_name=feature_2)
