@@ -41,22 +41,26 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
         ### only look at first 200 emails when developing
         ### once everything is working, remove this line to run over full dataset
         temp_counter += 1
-        if temp_counter < 200:
-            path = os.path.join('..', 'tools', path[:-1])
-            print path
-            email = open(path, "r")
+        # if temp_counter < 200:
+        path = os.path.join('..', 'tools', path[:-1])
+        print path
+        email = open(path, "r")
 
-            ### use parseOutText to extract the text from the opened email
+        ### use parseOutText to extract the text from the opened email
+        words = parseOutText(email)
 
-            ### use str.replace() to remove any instances of the words
-            ### ["sara", "shackleton", "chris", "germani"]
+        ### use str.replace() to remove any instances of the words
+        ### ["sara", "shackleton", "chris", "germani"]
+        for v in ["sara", "shackleton", "chris", "germani"]:
+            words = words.replace(v, "")
+        # words = words.replace("sara", "").replace("shackleton", "").replace("chris", "").replace("germani", "")
+        ### append the text to word_data
+        word_data.append(words)
+        ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
+        from_label = 0 if from_person == "sara" else "1"
+        from_data.append(from_label)
 
-            ### append the text to word_data
-
-            ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
-
-
-            email.close()
+        email.close()
 
 print "emails processed"
 from_sara.close()
@@ -65,10 +69,24 @@ from_chris.close()
 pickle.dump( word_data, open("your_word_data.pkl", "w") )
 pickle.dump( from_data, open("your_email_authors.pkl", "w") )
 
+print word_data[152]
 
 
 
 
 ### in Part 4, do TfIdf vectorization here
+from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer
+
+vect = TfidfVectorizer(stop_words="english", strip_accents="unicode", lowercase=True)
+bag_of_words = vect.fit_transform(word_data)
+
+print vect.vocabulary_
+for k, v in  vect.vocabulary_.iteritems():
+    if v == 34597:
+        print "Word: ", k
+print len(vect.get_feature_names())
+
+
+
 
 
